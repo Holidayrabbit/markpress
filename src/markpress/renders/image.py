@@ -1,10 +1,13 @@
 import os
+from reportlab.platypus import Image, Spacer,Paragraph
+from reportlab.lib.units import mm
+from .base import BaseRenderer
+from reportlab.lib import colors
+from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT, TA_JUSTIFY
+from reportlab.lib.styles import ParagraphStyle
 import tempfile
 import urllib.request
 from PIL import Image as PILImage
-from reportlab.platypus import Image, Spacer
-from reportlab.lib.units import mm
-from .base import BaseRenderer
 from ..utils import APP_TMP
 
 # 本地文档转换工具，允许加载高分辨率图片
@@ -12,7 +15,31 @@ PILImage.MAX_IMAGE_PIXELS = None
 
 
 class ImageRenderer(BaseRenderer):
-    """图片渲染器"""
+
+    def __init__(self, config, stylesheet):
+        super().__init__(config, stylesheet)
+        self._init_paragraph_style()
+
+    def _init_paragraph_style(self):
+        # 普通的段落样式
+        if "Body_Text" not in self.styles:
+            conf = self.config.styles.body
+            align_map = {'LEFT': TA_LEFT, 'CENTER': TA_CENTER, 'RIGHT': TA_RIGHT, 'JUSTIFY': TA_JUSTIFY}
+
+            self.styles.add(ParagraphStyle(
+                name="Body_Text",
+                fontName=self.config.fonts.regular,
+                fontSize=conf.font_size,
+                leading=conf.leading,
+                alignment=align_map.get(conf.alignment, TA_JUSTIFY),
+                spaceAfter=conf.space_after,
+                textColor=colors.HexColor(self.config.colors.text_primary),
+                wordWrap='CJK',
+                splitLongWords=True,
+                keepWithNext=False
+            ))
+
+    # 图片渲染器
     def render(self, image_path: str, alt_text: str = "", **kwargs):
         avail_width = kwargs.get('avail_width', 160 * mm)
 
@@ -25,8 +52,8 @@ class ImageRenderer(BaseRenderer):
             image_path = local_path
 
         if not os.path.exists(image_path):
-            print(f"警告: 图片文件不存在: {image_path}")
-            return []
+            print(f"警告: 图片文件不存在或无法访问: {image_path}")
+            return [Paragraph(f"<b><font color='red'>加载图片{alt_text}失败</font></b>",self.styles["Body_Text"])]
         try:
             img = Image(image_path)
             # 获取原始尺寸
