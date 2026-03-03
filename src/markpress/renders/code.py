@@ -171,7 +171,7 @@ class CodeRenderer(BaseRenderer):
 
         def wrap_cjk(text):
             return re.sub(r'([\u4e00-\u9fa5\u3000-\u303f\uff00-\uffef]+)',
-                          r'<font face="HarmonySC">\1</font>', text)
+                          rf'<font face="{self.config.fonts.regular}">\1</font>', text)
 
         if not HAS_PYGMENTS or not language:
             return wrap_cjk(escape_html(code))

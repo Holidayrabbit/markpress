@@ -4,8 +4,8 @@ import psMat
 import math
 
 # 配置
-INPUT_FILE = "/markpress/assets/fonts/ms-yahei-bold.ttf"
-OUTPUT_FILE = "/markpress/assets/fonts/ms-yahei-bold-italic.ttf"
+INPUT_FILE = "/Users/luochang/vscodeProj/markpress/src/markpress/assets/fonts/WenYuanSerifSC-Bold.ttf"
+OUTPUT_FILE = "/Users/luochang/vscodeProj/markpress/src/markpress/assets/fonts/WenYuanSerifSC-Bold-Italic.ttf"
 SKEW_ANGLE_DEG = 12  # 标准倾斜角度
 
 
@@ -53,3 +53,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# 执行方式：fontforge -script make_italic.py

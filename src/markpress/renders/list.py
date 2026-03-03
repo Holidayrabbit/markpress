@@ -114,8 +114,8 @@ class ListRenderer(BaseRenderer):
             raw_text = str(item)
             img_heights = [float(h) for h in re.findall(r'height="([\d\.]+)"', raw_text)]
             max_img_h = max(img_heights) if img_heights else 0
-            print("raw_text:", raw_text)
-            print("最大img高度：", max_img_h)
+            # print("raw_text:", raw_text)
+            # print("最大img高度：", max_img_h)
 
             base_style = self.styles["List_Body"]
             final_style = base_style
@@ -133,7 +133,7 @@ class ListRenderer(BaseRenderer):
 
             # 内容 (使用 SafeCJKParagraph 防止崩溃)
             item_content = [SafeCJKParagraph(raw_text, final_style)]
-            print(item_content)
+            # print(item_content)
 
             # 预读下一项，如果是列表，则是当前项的子列表
             if i + 1 < len(sub_items) and isinstance(sub_items[i + 1], list):

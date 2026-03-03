@@ -1,0 +1,100 @@
+{
+    "meta": {
+        "name": "GitHub Standard",
+        "version": "1.0",
+        "author": "MarkPress Team"
+    },
+    "page": {
+        "size": "A4",
+        "orientation": "portrait",
+        "margin_top": 25,
+        "margin_bottom": 25,
+        "margin_left": 25,
+        "margin_right": 25,
+        "background_color": "#FFFFFF"
+    },
+    "fonts": {
+        "regular": "MS-YaHei",
+        "bold": "MS-YaHei-Bold",
+        "heading": "MS-YaHei-Bold",
+        "code": "JetBrainsMono"
+    },
+    "colors": {
+        "text_primary": "#24292e",
+        "text_secondary": "#586069",
+        "link": "#0366d6",
+        "border": "#e1e4e8"
+    },
+    "styles": {
+        "body": {
+            "font_size": 10.5,
+            "leading": 17,
+            "alignment": "LEFT",
+            "space_after": 8
+        },
+        "headings": {
+            "h1": {
+                "font_size": 20,
+                "leading": 28,
+                "color": "#24292e",
+                "space_before": 20,
+                "space_after": 12,
+                "align": "LEFT"
+            },
+            "h2": {
+                "font_size": 16,
+                "leading": 24,
+                "color": "#24292e",
+                "space_before": 16,
+                "space_after": 10,
+                "align": "LEFT"
+            },
+            "h3": {
+                "font_size": 14,
+                "leading": 21,
+                "color": "#24292e",
+                "space_before": 14,
+                "space_after": 8,
+                "align": "LEFT"
+            },
+            "h4": {
+                "font_size": 12,
+                "leading": 18,
+                "color": "#24292e",
+                "space_before": 12,
+                "space_after": 8,
+                "align": "LEFT"
+            }
+        },
+        "code": {
+            "style_name": "github-light",
+            "font_size": 9,
+            "background_color": "#f6f8fa",
+            "border_color": "#eaecf0",
+            "show_line_numbers": false,
+            "highlight_colors": {
+                "Keyword": "#d73a49",
+                "Name.Function": "#6f42c1",
+                "Name.Class": "#6f42c1",
+                "String": "#032f62",
+                "Comment": "#6a737d",
+                "Number": "#005cc5",
+                "Operator": "#d73a49",
+                "Text": "#24292e"
+            }
+        },
+        "table": {
+            "header_bg": "#f6f8fa",
+            "header_text": "#24292e",
+            "row_bg_even": "#FFFFFF",
+            "row_bg_odd": "#fcfcfc",
+            "grid_color": "#dfe2e5"
+        },
+        "quote": {
+            "border_color": "#dfe2e5",
+            "border_width": 4,
+            "left_indent": 14,
+            "text_color": "#6a737d"
+        }
+    }
+}
