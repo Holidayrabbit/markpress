@@ -21,7 +21,8 @@ from .renders.heading import HeadingRenderer
 from .renders.table import TableRenderer
 from .renders.text import TextRenderer
 from .themes import StyleConfig
-from .utils import get_font_path, clear_temp_files, APP_TMP
+from .utils.fonts_manager import resolve_and_register_font
+from .utils.utils import get_font_path, clear_temp_files, APP_TMP
 
 
 class MarkPressEngine:
@@ -63,43 +64,92 @@ class MarkPressEngine:
         self.avail_width = self.doc.width  # 初始宽度 = 页面有效宽度
 
     def _register_fonts(self):
-        """从 Config 读取字体名，并从 assets 加载"""
+        """从 Config 读取字体名，并加载"""
         try:
-            fonts_to_load = [
-                # 正文常规体和斜体
-                self.config.fonts.regular,
-                self.config.fonts.bold,
-                self.config.fonts.regular + "-Italic",
-                self.config.fonts.bold + "-Italic",
-                # 代码常规体和斜体
-                self.config.fonts.code,
-                self.config.fonts.code + "-Bold",
-                self.config.fonts.code + "-Italic",
-                self.config.fonts.code + "-Bold-Italic"
-            ]
-            for font_name in fonts_to_load:
-                with get_font_path(font_name + ".ttf") as font_path:
-                    pdfmetrics.registerFont(TTFont(font_name, font_path))
+            reg_base = self.config.fonts.regular
+            bold_base = self.config.fonts.bold
+            code_base = self.config.fonts.code
 
+            # 构建待加载的资产矩阵：(逻辑名称, 物理文件名, 默认字体类型)
+            fonts_to_load = [
+                # 正文系列
+                (reg_base, f"{reg_base}.ttf", "sans"),
+                (bold_base, f"{bold_base}.ttf", "sans"),
+                (f"{reg_base}-Italic", f"{reg_base}-Italic.ttf", "sans"),
+                (f"{bold_base}-Italic", f"{bold_base}-Italic.ttf", "sans"),
+                # 代码系列 (默认使用 mono 等宽寄生)
+                (code_base, f"{code_base}.ttf", "mono"),
+                (f"{code_base}-Bold", f"{code_base}-Bold.ttf", "mono"),
+                (f"{code_base}-Italic", f"{code_base}-Italic.ttf", "mono"),
+                (f"{code_base}-Bold-Italic", f"{code_base}-Bold-Italic.ttf", "mono")
+            ]
+
+            for logical_name, filename, font_type in fonts_to_load:
+                # 动态属性嗅探：如果用户配置了衬线体 (Serif)，强制修正兜底类型
+                # 保证即使断网降级，学术论文依然能用系统的宋体渲染
+                if "Serif" in logical_name:
+                    font_type = "serif"
+
+                # 交给三级防线全权处理
+                resolve_and_register_font(logical_name, filename, font_type)
+
+            # 资产就绪，向 ReportLab 注册字体族群关联
             pdfmetrics.registerFontFamily(
                 self.config.fonts.regular,
                 normal=self.config.fonts.regular,
                 bold=self.config.fonts.bold,
-                italic=self.config.fonts.regular + "-Italic",
-                boldItalic=self.config.fonts.bold + "-Italic",
+                italic=f"{self.config.fonts.regular}-Italic",
+                boldItalic=f"{self.config.fonts.bold}-Italic",
             )
+
             pdfmetrics.registerFontFamily(
                 self.config.fonts.code,
                 normal=self.config.fonts.code,
-                bold=self.config.fonts.code + "-Bold",
-                italic=self.config.fonts.code + "-Italic",
-                boldItalic=self.config.fonts.code + "-Bold-Italic",
+                bold=f"{self.config.fonts.code}-Bold",
+                italic=f"{self.config.fonts.code}-Italic",
+                boldItalic=f"{self.config.fonts.code}-Bold-Italic",
             )
 
         except Exception as e:
-            print(f"CRITICAL: Font loading failed - {e}", file=sys.stderr)
-            # 字体加载失败是不能容忍的，直接退出或者抛异常
+            print(f"CRITICAL: Font pipeline completely failed - {e}", file=sys.stderr)
+            # 字体管线崩溃不可饶恕，必须立刻抛出异常打断进程
             raise e
+        # try:
+        #     fonts_to_load = [
+        #         # 正文常规体和斜体
+        #         self.config.fonts.regular,
+        #         self.config.fonts.bold,
+        #         self.config.fonts.regular + "-Italic",
+        #         self.config.fonts.bold + "-Italic",
+        #         # 代码常规体和斜体
+        #         self.config.fonts.code,
+        #         self.config.fonts.code + "-Bold",
+        #         self.config.fonts.code + "-Italic",
+        #         self.config.fonts.code + "-Bold-Italic"
+        #     ]
+        #     for font_name in fonts_to_load:
+        #         with get_font_path(font_name + ".ttf") as font_path:
+        #             pdfmetrics.registerFont(TTFont(font_name, font_path))
+        #
+        #     pdfmetrics.registerFontFamily(
+        #         self.config.fonts.regular,
+        #         normal=self.config.fonts.regular,
+        #         bold=self.config.fonts.bold,
+        #         italic=self.config.fonts.regular + "-Italic",
+        #         boldItalic=self.config.fonts.bold + "-Italic",
+        #     )
+        #     pdfmetrics.registerFontFamily(
+        #         self.config.fonts.code,
+        #         normal=self.config.fonts.code,
+        #         bold=self.config.fonts.code + "-Bold",
+        #         italic=self.config.fonts.code + "-Italic",
+        #         boldItalic=self.config.fonts.code + "-Bold-Italic",
+        #     )
+        #
+        # except Exception as e:
+        #     print(f"CRITICAL: Font loading failed - {e}", file=sys.stderr)
+        #     # 字体加载失败是不能容忍的，直接退出或者抛异常
+        #     raise e
 
     def _init_doc_template(self):
         # 解析页面大小

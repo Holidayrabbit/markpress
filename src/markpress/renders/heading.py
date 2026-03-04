@@ -9,7 +9,7 @@ from .base import BaseRenderer
 class HeadingRenderer(BaseRenderer):
     def render(self, text: str, level: int = 1, **kwargs):
         # 限制层级
-        level = max(1, min(4, level))
+        level = max(1, min(6, level))
 
         # 从 Config 获取样式数据 (例如 config.styles.headings.h1)
         h_style_conf = getattr(self.config.styles.headings, f"h{level}")

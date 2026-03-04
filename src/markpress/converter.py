@@ -6,7 +6,7 @@ from pprint import pprint
 import mistune
 from bs4 import BeautifulSoup
 from .core import MarkPressEngine
-from .utils import APP_TMP, _get_raw_text, _slugify, strip_front_matter, _optimize_ast_html_blocks
+from .utils.utils import APP_TMP, get_raw_text, slugify, strip_front_matter, optimize_ast_html_blocks
 
 
 def convert_markdown_file(input_path: str, output_path: str, theme: str = "academic"):
@@ -44,7 +44,7 @@ def convert_markdown_file(input_path: str, output_path: str, theme: str = "acade
 
     # 获取 AST (Abstract Syntax Tree)，这是一个由字典组成的列表，每个字典代表一个 Block (段落, 标题, 代码块等)
     ast = markdown(clean_md)
-    optimized_ast = _optimize_ast_html_blocks(ast)
+    optimized_ast = optimize_ast_html_blocks(ast)
 
     # 初始化 PDF 引擎
     writer = MarkPressEngine(output_path, theme)
@@ -75,8 +75,8 @@ def _render_ast(writer: MarkPressEngine, tokens: list, base_dir: str = "."):
         if t_type == 'heading':
             level = attrs.get('level', 1)
             # 1. 获取纯文本并生成目标 ID
-            raw_text = _get_raw_text(children)
-            anchor_id = _slugify(raw_text)
+            raw_text = get_raw_text(children)
+            anchor_id = slugify(raw_text)
 
             # 2. 渲染带样式的 XML 内容
             xml_text = _render_inline(writer, children)
@@ -93,7 +93,7 @@ def _render_ast(writer: MarkPressEngine, tokens: list, base_dir: str = "."):
         # 段落 (Paragraph)
         elif t_type == 'paragraph':
             # 检测 mistune 未能解析的管道表格（不规则列数等情况）
-            raw_text = _get_raw_text(children)
+            raw_text = get_raw_text(children)
             if '\n' in raw_text and '|' in raw_text:
                 table_data = _try_parse_pipe_table(raw_text)
                 if table_data:

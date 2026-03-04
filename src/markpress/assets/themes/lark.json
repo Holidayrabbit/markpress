@@ -64,6 +64,22 @@
                 "space_before": 12,
                 "space_after": 8,
                 "align": "LEFT"
+            },
+            "h5": {
+                "font_size": 11,
+                "leading": 14,
+                "color": "#1f2329",
+                "space_before": 5,
+                "space_after": 5,
+                "align": "LEFT"
+            },
+            "h6": {
+                "font_size": 10.5,
+                "leading": 14,
+                "color": "#1f2329",
+                "space_before": 5,
+                "space_after": 5,
+                "align": "LEFT"
             }
         },
         "code": {

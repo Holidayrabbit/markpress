@@ -8,7 +8,7 @@ from reportlab.lib.styles import ParagraphStyle
 import tempfile
 import urllib.request
 from PIL import Image as PILImage
-from ..utils import APP_TMP
+from ..utils.utils import APP_TMP
 
 # 本地文档转换工具，允许加载高分辨率图片
 PILImage.MAX_IMAGE_PIXELS = None

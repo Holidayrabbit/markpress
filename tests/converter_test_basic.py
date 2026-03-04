@@ -1,8 +1,8 @@
 from markpress.converter import convert_markdown_file
 
-convert_markdown_file("test_basic.md", "test_basic.pdf")
+# convert_markdown_file("test_basic.md", "test_basic.pdf")
 convert_markdown_file("test_basic.md", "test_basic-theme-lark.pdf","lark")
-convert_markdown_file("test_basic.md", "test_basic-theme-github.pdf","github")
+# convert_markdown_file("test_basic.md", "test_basic-theme-github.pdf","github")
 convert_markdown_file("test_basic.md", "test_basic-theme-vue.pdf","vue")
 
 # convert_markdown_file("DeepSeekV3_2.md", "DeepSeekV3_2.pdf")

@@ -7,7 +7,7 @@ from playwright.sync_api import sync_playwright
 from reportlab.platypus import Flowable
 
 from .base import BaseRenderer
-from ..utils import get_katex_path, APP_TMP
+from ..utils.utils import get_katex_path, APP_TMP
 
 
 class KatexRenderer(BaseRenderer):

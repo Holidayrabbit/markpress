@@ -1,8 +1,7 @@
-import copy
 import re
+
 import emoji
-from bs4 import BeautifulSoup  # [NEW]
-from bs4 import NavigableString
+from bs4 import BeautifulSoup
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT, TA_JUSTIFY
 from reportlab.lib.styles import ParagraphStyle
@@ -10,7 +9,7 @@ from reportlab.platypus import Paragraph
 
 from .base import BaseRenderer
 from ..inherited.SmartInlineImgParagraph import SmartInlineImgParagraph
-from ..utils import replace_to_twemoji, replace_to_local_twemoji
+from ..utils.utils import replace_to_local_twemoji
 
 
 class TextRenderer(BaseRenderer):

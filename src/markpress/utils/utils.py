@@ -57,7 +57,7 @@ def clear_temp_files():
                 pass
 
 
-def _get_raw_text(tokens: list) -> str:
+def get_raw_text(tokens: list) -> str:
     """递归提取 tokens 中的纯文本，剥离所有嵌套结构"""
     res = ""
     if not tokens: return res
@@ -65,11 +65,11 @@ def _get_raw_text(tokens: list) -> str:
         if 'raw' in tok:
             res += tok['raw']
         if 'children' in tok:
-            res += _get_raw_text(tok['children'])
+            res += get_raw_text(tok['children'])
     return res
 
 
-def _slugify(text: str) -> str:
+def slugify(text: str) -> str:
     """
     1:1 完美复刻 GitHub 风格的锚点 ID 生成算法
     """
@@ -115,7 +115,7 @@ def strip_front_matter(md_text: str) -> str:
     return pattern.sub('', md_text)
 
 
-def _optimize_ast_html_blocks(tokens: list) -> list:
+def optimize_ast_html_blocks(tokens: list) -> list:
     """
     AST 核心中间件：
     1. 缝合被 Markdown 规范错切的 HTML 碎块。
@@ -168,7 +168,7 @@ def _optimize_ast_html_blocks(tokens: list) -> list:
 
             # 递归处理子节点
             if 'children' in tok and tok['children']:
-                tok['children'] = _optimize_ast_html_blocks(tok['children'])
+                tok['children'] = optimize_ast_html_blocks(tok['children'])
 
             optimized.append(tok)
 

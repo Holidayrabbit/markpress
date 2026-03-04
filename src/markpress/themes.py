@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 from typing import Any, Literal, Mapping
-from .utils import get_theme_path
+from .utils.utils import get_theme_path
 
 
 # ---------- small utilities ----------
@@ -200,6 +200,8 @@ class Headings:
     h2: HeadingStyle
     h3: HeadingStyle
     h4: HeadingStyle
+    h5: HeadingStyle
+    h6: HeadingStyle
 
     @staticmethod
     def from_dict(d: Mapping[str, Any], path: str = "styles.headings") -> "Headings":
@@ -209,6 +211,8 @@ class Headings:
             h2=HeadingStyle.from_dict(_get(d, "h2", path), f"{path}.h2"),
             h3=HeadingStyle.from_dict(_get(d, "h3", path), f"{path}.h3"),
             h4=HeadingStyle.from_dict(_get(d, "h4", path), f"{path}.h4"),
+            h5=HeadingStyle.from_dict(_get(d, "h5", path), f"{path}.h5"),
+            h6=HeadingStyle.from_dict(_get(d, "h6", path), f"{path}.h6"),
         )
 
 @dataclass(frozen=True)

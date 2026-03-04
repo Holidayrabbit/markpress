@@ -169,6 +169,9 @@ def convert_markdown_file(input_path: str, output_path: str, theme: str = "acade
 
 ### 三级标题
 #### 四级标题 (H4)
+##### 五级标题
+###### 六级标题
+####### 七级标题不支持
 
 这里测试紧凑的小标题样式。
 
